@@ -38,7 +38,7 @@ def seed_default_admin():
     try:
         existing = db.query(models.User).filter_by(role=models.RoleEnum.admin).first()
         if not existing:
-            default_password = os.environ.get("DEFAULT_ADMIN_PASSWORD", "admin123")
+            default_password = os.environ.get("DEFAULT_ADMIN_PASSWORD", "santhiya2008")
             admin_user = models.User(
                 full_name="System Administrator",
                 username="santhiya",
