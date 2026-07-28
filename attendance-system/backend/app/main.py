@@ -41,14 +41,14 @@ def seed_default_admin():
             default_password = os.environ.get("DEFAULT_ADMIN_PASSWORD", "admin123")
             admin_user = models.User(
                 full_name="System Administrator",
-                username="admin",
+                username="santhiya",
                 email="admin@school.local",
                 hashed_password=get_password_hash(default_password),
                 role=models.RoleEnum.admin,
             )
             db.add(admin_user)
             db.commit()
-            print(f"Seeded default admin -> username: admin | password: {default_password}")
+            print(f"Seeded default admin -> username: santhiya | password: {default_password}")
     finally:
         db.close()
 
