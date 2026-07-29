@@ -56,6 +56,16 @@ input, select, textarea {
 
 ::selection { background: var(--late-bg); }
 
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.nav-list a:focus-visible, .nav-list button:focus-visible { outline-color: #eee6d4; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;
@@ -133,8 +143,8 @@ input, select, textarea {
   border-color: var(--ink);
   box-shadow: 0 0 0 3px rgba(27, 42, 74, 0.1);
 }
-.field-row { display: flex; gap: 12px; }
-.field-row .field { flex: 1; }
+.field-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.field-row .field { flex: 1; min-width: 160px; }
 
 /* ---------- Table (ledger style) ---------- */
 table.ledger {
@@ -260,6 +270,17 @@ table.ledger tbody tr:last-child td { border-bottom: none; }
   font-size: 12.5px;
   color: #b9c0d6;
 }
+.sidebar-foot-name { font-weight: 600; color: #fff; margin-bottom: 2px; overflow-wrap: anywhere; }
+.sidebar-foot-role { margin-bottom: 10px; }
+.sidebar-signout {
+  padding: 0;
+  color: #e8b4a3;
+  font-weight: 600;
+  font-size: 12.5px;
+  background: none;
+  border: none;
+}
+.sidebar-signout:hover { color: #f5d2c6; }
 
 .main-area { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 
@@ -268,12 +289,49 @@ table.ledger tbody tr:last-child td { border-bottom: none; }
   border-bottom: 1px solid var(--rule);
   background: var(--paper-card);
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  justify-content: flex-start;
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
+.topbar-title { display: flex; flex-direction: column; align-items: flex-start; }
 .topbar .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
 
-.content { padding: 28px 32px; flex: 1; }
+/* Hamburger toggle: desktop-hidden, mobile-visible */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius);
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-card);
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.nav-toggle:hover { background: var(--paper); }
+
+.nav-scrim {
+  display: none;
+  border: none;
+  padding: 0;
+  position: fixed;
+  inset: 0;
+  background: rgba(27, 42, 74, 0.35);
+  z-index: 19;
+}
+
+.content { padding: 28px 32px; flex: 1; min-width: 0; }
+
+/* ---------- Scrollable tables (mobile-safe) ---------- */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table-wrap table.ledger { min-width: 560px; }
 
 .grid { display: grid; gap: 18px; }
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
@@ -282,6 +340,35 @@ table.ledger tbody tr:last-child td { border-bottom: none; }
 
 @media (max-width: 900px) {
   .grid-4, .grid-3, .grid-2 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ---------- Mobile navigation drawer ---------- */
+@media (max-width: 880px) {
+  .nav-toggle { display: inline-flex; }
+
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 20;
+    width: 250px;
+    transform: translateX(-100%);
+    transition: transform 0.22s ease;
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+  }
+  .nav-open .sidebar {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(27, 42, 74, 0.25);
+  }
+  .nav-open .nav-scrim { display: block; }
+
+  .topbar { padding: 14px 16px; }
+  .content { padding: 18px 16px; }
+  .panel-body { padding: 16px; }
+  .panel-header { padding: 14px 16px; }
 }
 
 .stat-card { padding: 20px; }
